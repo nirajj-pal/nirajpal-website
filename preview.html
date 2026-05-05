@@ -1,0 +1,2152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Niraj Pal — DevOps Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #070b14;
+    --bg2: #0d1220;
+    --bg3: #111827;
+    --green: #00ff88;
+    --cyan: #00d4ff;
+    --dim: #8892a4;
+    --text: #cdd6f0;
+    --white: #eef2ff;
+    --border: rgba(0,255,136,0.15);
+    --card: rgba(13,18,32,0.8);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Fira Code', monospace;
+    overflow-x: hidden;
+    line-height: 1.7;
+  }
+
+  /* ---- GRID BG ---- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---- NAV ---- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 3rem;
+    background: rgba(7,11,20,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--green);
+    text-decoration: none;
+    letter-spacing: -0.02em;
+  }
+
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    color: var(--dim);
+    text-decoration: none;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--green); }
+
+  /* ---- HERO ---- */
+  #hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 0 3rem;
+    z-index: 1;
+  }
+
+  .hero-inner { max-width: 860px; }
+
+  .hero-label {
+    font-size: 0.78rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 1.2rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.3s forwards;
+  }
+
+  .hero-label span {
+    display: inline-block;
+    width: 32px;
+    height: 1px;
+    background: var(--green);
+    vertical-align: middle;
+    margin-right: 10px;
+  }
+
+  h1.hero-name {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(3.5rem, 8vw, 7rem);
+    font-weight: 800;
+    line-height: 1;
+    color: var(--white);
+    letter-spacing: -0.03em;
+    margin-bottom: 0.6rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.5s forwards;
+  }
+
+  h1.hero-name em {
+    display: block;
+    color: var(--green);
+    font-style: normal;
+  }
+
+  .hero-tagline {
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: var(--dim);
+    margin-bottom: 1.4rem;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.7s forwards;
+  }
+
+  .hero-tagline strong { color: var(--cyan); font-weight: 400; }
+
+  .terminal-box {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.2rem 1.5rem;
+    margin: 2rem 0;
+    font-size: 0.85rem;
+    max-width: 600px;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 0.9s forwards;
+  }
+
+  .terminal-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 0.8rem;
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot.r { background: #ff5f56; }
+  .dot.y { background: #ffbd2e; }
+  .dot.g { background: #27c93f; }
+
+  .terminal-line { color: var(--dim); }
+  .terminal-line .prompt { color: var(--green); margin-right: 8px; }
+  .terminal-line .cmd { color: var(--white); }
+  .terminal-line .out { color: var(--cyan); }
+
+  .cursor {
+    display: inline-block;
+    width: 8px;
+    height: 1em;
+    background: var(--green);
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.7s ease 1.1s forwards;
+  }
+
+  .btn-primary {
+    padding: 0.7rem 1.8rem;
+    background: var(--green);
+    color: #070b14;
+    text-decoration: none;
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 24px rgba(0,255,136,0.35);
+  }
+
+  .btn-outline {
+    padding: 0.7rem 1.8rem;
+    border: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-radius: 4px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .btn-outline:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    color: var(--dim);
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.5s forwards;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, var(--green), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* ---- SECTIONS ---- */
+  section { position: relative; z-index: 1; padding: 6rem 3rem; max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    display: block;
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+    max-width: 200px;
+  }
+
+  h2.section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.02em;
+    margin-bottom: 3rem;
+  }
+
+  /* ---- ABOUT ---- */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .about-text p { color: var(--dim); margin-bottom: 1.2rem; font-size: 0.9rem; }
+  .about-text p strong { color: var(--text); font-weight: 400; }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+  }
+
+  .stat-card .num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--green);
+    line-height: 1;
+    display: block;
+  }
+
+  .stat-card .lbl {
+    font-size: 0.72rem;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-top: 4px;
+    display: block;
+  }
+
+  .cert-list { list-style: none; margin-top: 1rem; }
+  .cert-list li {
+    font-size: 0.8rem;
+    color: var(--dim);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .cert-list li::before {
+    content: '✓';
+    color: var(--green);
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  /* ---- SKILLS ---- */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .skill-category {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+
+  .skill-category:hover {
+    border-color: rgba(0,255,136,0.4);
+    transform: translateY(-3px);
+  }
+
+  .skill-cat-title {
+    font-size: 0.72rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .skill-cat-title .icon { font-size: 1rem; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .tag {
+    font-size: 0.72rem;
+    padding: 4px 10px;
+    border-radius: 4px;
+    background: rgba(0,255,136,0.06);
+    border: 1px solid rgba(0,255,136,0.15);
+    color: var(--text);
+    letter-spacing: 0.03em;
+    transition: background 0.15s;
+  }
+
+  .tag:hover { background: rgba(0,255,136,0.12); }
+  .tag.cyan { background: rgba(0,212,255,0.06); border-color: rgba(0,212,255,0.2); }
+  .tag.cyan:hover { background: rgba(0,212,255,0.12); }
+
+  /* ---- EXPERIENCE ---- */
+  .timeline { position: relative; padding-left: 2rem; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--green), transparent);
+  }
+
+  .job {
+    position: relative;
+    margin-bottom: 3rem;
+    opacity: 0;
+    transform: translateX(-15px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .job.visible { opacity: 1; transform: translateX(0); }
+
+  .job::before {
+    content: '';
+    position: absolute;
+    left: -2.4rem;
+    top: 8px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 10px rgba(0,255,136,0.5);
+  }
+
+  .job-header { margin-bottom: 0.6rem; }
+
+  .job-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .job-company { color: var(--green); font-size: 0.85rem; }
+
+  .job-date {
+    font-size: 0.72rem;
+    color: var(--dim);
+    letter-spacing: 0.1em;
+    margin-top: 2px;
+  }
+
+  .job-points { list-style: none; margin-top: 0.8rem; }
+
+  .job-points li {
+    font-size: 0.82rem;
+    color: var(--dim);
+    padding: 0.3rem 0;
+    padding-left: 1.2rem;
+    position: relative;
+  }
+
+  .job-points li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--green);
+    font-size: 0.75rem;
+  }
+
+  .job-tools { margin-top: 1rem; display: flex; flex-wrap: wrap; gap: 6px; }
+
+  /* ---- PROJECTS ---- */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .project-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.8rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s, transform 0.5s, border-color 0.2s;
+  }
+
+  .project-card.visible { opacity: 1; transform: translateY(0); }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--green), var(--cyan));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+
+  .project-card:hover::before { transform: scaleX(1); }
+  .project-card:hover { border-color: rgba(0,255,136,0.3); transform: translateY(-4px); }
+
+  .project-num {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+  }
+
+  .project-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.8rem;
+  }
+
+  .project-desc { font-size: 0.82rem; color: var(--dim); margin-bottom: 1.2rem; }
+
+  .project-results {
+    background: rgba(0,255,136,0.04);
+    border: 1px solid rgba(0,255,136,0.1);
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+    font-size: 0.78rem;
+    color: var(--green);
+  }
+
+  .project-results strong { display: block; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); margin-bottom: 4px; }
+
+  .project-links { display: flex; gap: 0.8rem; margin-top: 1.2rem; }
+
+  .proj-link {
+    font-size: 0.75rem;
+    color: var(--cyan);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: color 0.15s;
+  }
+
+  .proj-link:hover { color: var(--white); }
+
+  /* ---- CONTACT ---- */
+  #contact { padding-bottom: 4rem; }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 4rem;
+    align-items: start;
+  }
+
+  .contact-info p { font-size: 0.85rem; color: var(--dim); margin-bottom: 2rem; }
+
+  .social-links { display: flex; flex-direction: column; gap: 0.8rem; }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1rem;
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text);
+    font-size: 0.82rem;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .social-link:hover { border-color: var(--green); color: var(--green); }
+
+  .social-link .s-label { margin-left: auto; font-size: 0.7rem; color: var(--dim); }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .form-group label {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+  }
+
+  .form-group input,
+  .form-group textarea {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    color: var(--text);
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    outline: none;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--green); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .submit-btn {
+    padding: 0.85rem 2rem;
+    background: var(--green);
+    color: #070b14;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.15s;
+    align-self: flex-start;
+  }
+
+  .submit-btn:hover {
+    box-shadow: 0 0 24px rgba(0,255,136,0.4);
+    transform: translateY(-1px);
+  }
+
+  /* ---- FOOTER ---- */
+  footer {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    color: var(--dim);
+    font-size: 0.75rem;
+  }
+
+  footer span { color: var(--green); }
+
+  /* ---- ANIMATIONS ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  /* ---- INTERACTIVE LAYER ---- */
+  body {
+    transition: background 0.25s ease, color 0.25s ease;
+  }
+
+  body[data-theme="light"] {
+    --bg: #eef5ff;
+    --bg2: #ffffff;
+    --bg3: #dce9ff;
+    --green: #00a86b;
+    --cyan: #0577c9;
+    --dim: #526173;
+    --text: #1b2638;
+    --white: #08111f;
+    --border: rgba(0,168,107,0.22);
+    --card: rgba(255,255,255,0.86);
+  }
+
+  body[data-theme="light"] nav {
+    background: rgba(238,245,255,0.86);
+  }
+
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--green), var(--cyan));
+    z-index: 200;
+    box-shadow: 0 0 18px rgba(0,255,136,0.45);
+  }
+
+  .nav-shell {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .nav-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .icon-btn,
+  .menu-toggle,
+  .chip-btn,
+  .details-btn,
+  .play-btn,
+  .terminal-send {
+    border: 1px solid var(--border);
+    background: rgba(0,255,136,0.04);
+    color: var(--text);
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: 'Fira Code', monospace;
+    transition: transform 0.15s, border-color 0.2s, color 0.2s, background 0.2s;
+  }
+
+  .icon-btn {
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+  }
+
+  .icon-btn:hover,
+  .menu-toggle:hover,
+  .chip-btn:hover,
+  .details-btn:hover,
+  .play-btn:hover,
+  .terminal-send:hover {
+    transform: translateY(-1px);
+    border-color: var(--green);
+    color: var(--green);
+    background: rgba(0,255,136,0.09);
+  }
+
+  .menu-toggle {
+    display: none;
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+
+  .hero-quick-actions {
+    display: flex;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    margin-top: 0.9rem;
+  }
+
+  .mini-cmd {
+    border: 1px solid rgba(0,255,136,0.18);
+    background: rgba(0,255,136,0.06);
+    color: var(--text);
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.7rem;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s, transform 0.15s;
+  }
+
+  .mini-cmd:hover {
+    border-color: var(--cyan);
+    color: var(--cyan);
+    transform: translateY(-1px);
+  }
+
+  .section-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    align-items: center;
+    margin: -1.5rem 0 2rem;
+  }
+
+  .chip-btn {
+    padding: 0.45rem 0.9rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+  }
+
+  .chip-btn.active {
+    color: #070b14;
+    background: var(--green);
+    border-color: var(--green);
+  }
+
+  .search-box {
+    min-width: min(100%, 280px);
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 0.55rem 0.9rem;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.76rem;
+    outline: none;
+    margin-left: auto;
+  }
+
+  .search-box:focus {
+    border-color: var(--green);
+  }
+
+  .skill-category.is-hidden,
+  .project-card.is-hidden {
+    display: none;
+  }
+
+  .project-card {
+    cursor: pointer;
+  }
+
+  .project-card:focus {
+    outline: 2px solid var(--cyan);
+    outline-offset: 4px;
+  }
+
+  .details-btn {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.72rem;
+  }
+
+  .project-actions {
+    display: flex;
+    gap: 0.65rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+
+  /* ---- PLAYGROUND ---- */
+  #playground {
+    max-width: 1180px;
+  }
+
+  .play-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+
+  .play-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    min-height: 420px;
+    box-shadow: 0 18px 60px rgba(0,0,0,0.18);
+  }
+
+  .play-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border-bottom: 1px solid var(--border);
+    background: rgba(0,255,136,0.04);
+  }
+
+  .play-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    color: var(--white);
+    letter-spacing: -0.02em;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid rgba(0,255,136,0.18);
+    border-radius: 999px;
+    color: var(--green);
+    padding: 0.35rem 0.65rem;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .status-pill::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 10px currentColor;
+  }
+
+  .play-body {
+    padding: 1.2rem;
+  }
+
+  .play-output {
+    height: 260px;
+    overflow: auto;
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 10px;
+    background: rgba(0,0,0,0.22);
+    padding: 1rem;
+    font-size: 0.78rem;
+    color: var(--dim);
+  }
+
+  .play-output p {
+    margin-bottom: 0.5rem;
+  }
+
+  .play-output .ok {
+    color: var(--green);
+  }
+
+  .play-output .warn {
+    color: #ffbd2e;
+  }
+
+  .play-output .info {
+    color: var(--cyan);
+  }
+
+  .terminal-form {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 0.7rem;
+    align-items: center;
+    margin-top: 1rem;
+  }
+
+  .terminal-form .prompt {
+    color: var(--green);
+  }
+
+  .terminal-form input {
+    width: 100%;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text);
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    padding: 0.7rem 1rem;
+    outline: none;
+  }
+
+  .terminal-form input:focus {
+    border-color: var(--green);
+  }
+
+  .terminal-send {
+    padding: 0.65rem 1rem;
+  }
+
+  .command-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 1rem;
+  }
+
+  .cluster-board {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .cluster-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+  }
+
+  .metric {
+    background: rgba(0,255,136,0.04);
+    border: 1px solid rgba(0,255,136,0.1);
+    border-radius: 10px;
+    padding: 0.8rem;
+  }
+
+  .metric strong {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    color: var(--green);
+    line-height: 1;
+  }
+
+  .metric span {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.65rem;
+    color: var(--dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .cluster-map {
+    display: grid;
+    gap: 0.8rem;
+  }
+
+  .node {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.85rem;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .node-head {
+    display: flex;
+    justify-content: space-between;
+    color: var(--dim);
+    font-size: 0.72rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .pods {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .pod {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    background: var(--green);
+    box-shadow: 0 0 14px rgba(0,255,136,0.3);
+    transform: scale(1);
+    animation: podPulse 2s ease-in-out infinite;
+  }
+
+  .pod.pending {
+    background: #ffbd2e;
+    box-shadow: 0 0 14px rgba(255,189,46,0.3);
+  }
+
+  .pod.fail {
+    background: #ff5f56;
+    box-shadow: 0 0 14px rgba(255,95,86,0.3);
+  }
+
+  .play-actions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.7rem;
+  }
+
+  .play-btn {
+    width: 100%;
+    padding: 0.75rem 0.8rem;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 0.74rem;
+  }
+
+  .play-btn strong {
+    display: block;
+    color: var(--white);
+    margin-bottom: 2px;
+  }
+
+  .play-btn span {
+    color: var(--dim);
+    font-size: 0.66rem;
+  }
+
+  @keyframes podPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.88); opacity: 0.72; }
+  }
+
+  /* ---- MODAL / TOAST / BACK TOP ---- */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 300;
+    background: rgba(3,7,13,0.78);
+    backdrop-filter: blur(10px);
+    display: grid;
+    place-items: center;
+    padding: 1.2rem;
+  }
+
+  .modal-backdrop[hidden] {
+    display: none;
+  }
+
+  .modal {
+    width: min(720px, 100%);
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.4rem;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.35);
+  }
+
+  .modal-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .modal h3 {
+    font-family: 'Syne', sans-serif;
+    color: var(--white);
+    font-size: 1.7rem;
+    letter-spacing: -0.02em;
+  }
+
+  .modal-close {
+    background: transparent;
+    color: var(--dim);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+
+  .modal-close:hover {
+    color: var(--green);
+    border-color: var(--green);
+  }
+
+  .modal-body {
+    color: var(--dim);
+    font-size: 0.86rem;
+  }
+
+  .toast {
+    position: fixed;
+    right: 1.2rem;
+    bottom: 1.2rem;
+    z-index: 350;
+    max-width: min(360px, calc(100vw - 2.4rem));
+    background: var(--bg2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.24);
+    transform: translateY(20px);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.2s, opacity 0.2s;
+    font-size: 0.8rem;
+  }
+
+  .toast.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .back-top {
+    position: fixed;
+    right: 1.2rem;
+    bottom: 5rem;
+    z-index: 180;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .back-top.visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    section { padding: 4rem 1.5rem; }
+    #hero { padding: 0 1.5rem; }
+    .about-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 900px) {
+    .play-grid { grid-template-columns: 1fr; }
+    .search-box { margin-left: 0; }
+  }
+
+  @media (max-width: 768px) {
+    .nav-shell { gap: 0.7rem; }
+    .menu-toggle { display: grid; place-items: center; }
+    .nav-links {
+      position: fixed;
+      top: 68px;
+      left: 1rem;
+      right: 1rem;
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      padding: 1rem;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 18px 50px rgba(0,0,0,0.24);
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { display: block; padding: 0.8rem; }
+    .cluster-metrics { grid-template-columns: 1fr; }
+    .play-actions { grid-template-columns: 1fr; }
+    .terminal-form { grid-template-columns: auto 1fr; }
+    .terminal-send { grid-column: 2; }
+  }
+
+</style>
+</head>
+<body>
+<div class="scroll-progress" id="scroll-progress"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#hero" class="nav-logo">NP.dev</a>
+
+  <div class="nav-shell">
+    <button class="menu-toggle" id="menu-toggle" aria-label="Open menu" aria-expanded="false">☰</button>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#playground">Play</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="icon-btn" id="theme-toggle" aria-label="Toggle theme">☾</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-inner">
+    <p class="hero-label"><span></span>Available for new opportunities</p>
+    <h1 class="hero-name">
+      Niraj<em>Pal.</em>
+    </h1>
+    <p class="hero-tagline">
+      DevOps &amp; Kubernetes Engineer · Building <strong>resilient infrastructure</strong> at scale
+    </p>
+
+    <div class="terminal-box">
+      <div class="terminal-bar">
+        <div class="dot r"></div>
+        <div class="dot y"></div>
+        <div class="dot g"></div>
+      </div>
+      <div class="terminal-line"><span class="prompt">$</span><span class="cmd">kubectl get pods --all-namespaces</span></div>
+      <div class="terminal-line" style="margin-top:6px;"><span class="prompt">→</span><span class="out">1000+ clusters managed · 50% faster incident response · 90% fewer manual interventions</span></div>
+      <div class="terminal-line" style="margin-top:8px;"><span class="prompt">$</span><span id="typing-text"></span><span class="cursor"></span></div>
+
+      <div class="hero-quick-actions" aria-label="Quick terminal actions">
+        <button class="mini-cmd" data-command="status">status</button>
+        <button class="mini-cmd" data-command="deploy">deploy</button>
+        <button class="mini-cmd" data-command="scale 5">scale 5</button>
+        <button class="mini-cmd" data-command="logs">logs</button>
+      </div>
+    </div>
+
+    <div class="hero-cta">
+      <a href="#projects" class="btn-primary">View Projects</a>
+      <a href="#playground" class="btn-outline">Play Terminal</a>
+      <a href="#contact" class="btn-outline">Get in Touch</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>scroll</span>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label reveal">01 · About</p>
+  <h2 class="section-title reveal">Who I Am</h2>
+
+  <div class="about-grid reveal">
+    <div class="about-text">
+      <p>I'm a <strong>DevOps &amp; Kubernetes/Openshift Engineer</strong> with a passion for building infrastructure that just works — at any scale, under any load.</p>
+      <p>My journey began in <strong>frontend development</strong>, where I optimized UX and deployed containerized apps on AKS. That hands-on deployment experience ignited a deeper fascination with the platform layer — and led me fully into the cloud-native world.</p>
+      <p>At <strong>Jio Platforms</strong>, I managed 1000+ Kubernetes clusters, led runtime migrations, and cut manual security interventions by 90%. Now at <strong>ESDS Software Solutions</strong>, I design end-to-end GitOps pipelines and multi-tenant observability stacks across OpenShift and Kubernetes environments.</p>
+
+      <ul class="cert-list">
+        <li>Certified Kubernetes Administrator (CKA)</li>
+        <li>Microsoft Certified: Azure</li>
+        <li>Linux Systems Administration</li>
+        <li>Infrastructure Automation with Ansible</li>
+        <li>AI Infrastructure & DevOps Practices</li>
+        <li>Cloud-Native Deployment Automation</li>
+        <li>Containerized Workload Management</li>
+        <li>Outstanding Performance Recognition</li>
+      </ul>
+    </div>
+
+    <div class="about-stats">
+      <div class="stat-card">
+        <span class="num">1000+</span>
+        <span class="lbl">K8s clusters managed</span>
+      </div>
+      <div class="stat-card">
+        <span class="num">90%</span>
+        <span class="lbl">reduction in manual interventions</span>
+      </div>
+      <div class="stat-card">
+        <span class="num">50%</span>
+        <span class="lbl">faster incident response</span>
+      </div>
+      <div class="stat-card">
+        <span class="num">5+</span>
+        <span class="lbl">years of DevOps experience</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label reveal">02 · Skills</p>
+  <h2 class="section-title reveal">Tech Stack</h2>
+
+  <div class="section-controls reveal" id="skill-controls">
+    <button class="chip-btn active" data-skill-filter="all">All</button>
+    <button class="chip-btn" data-skill-filter="cloud">Cloud</button>
+    <button class="chip-btn" data-skill-filter="gitops">GitOps</button>
+    <button class="chip-btn" data-skill-filter="observability">Observability</button>
+    <button class="chip-btn" data-skill-filter="security">Security</button>
+    <input class="search-box" id="skill-search" type="search" placeholder="Search skills..." />
+  </div>
+
+  <div class="skills-grid">
+
+    <div class="skill-category reveal">
+      <div class="skill-cat-title"><span class="icon">⎈</span>Orchestration &amp; Cloud</div>
+      <div class="tags">
+        <span class="tag">Kubernetes</span>
+        <span class="tag">OpenShift</span>
+        <span class="tag">AKS (Azure)</span>
+        <span class="tag">Helm</span>
+        <span class="tag">Istio</span>
+        <span class="tag">ArgoCD</span>
+        <span class="tag">Terraform</span>
+        <span class="tag">AWS</span>
+      </div>
+    </div>
+
+    <div class="skill-category reveal">
+      <div class="skill-cat-title"><span class="icon">⚙</span>CI/CD &amp; GitOps</div>
+      <div class="tags">
+        <span class="tag cyan">Jenkins</span>
+        <span class="tag cyan">GitHub Actions</span>
+        <span class="tag cyan">GitLab CI</span>
+        <span class="tag cyan">Docker</span>
+        <span class="tag cyan">Harbor Registry</span>
+        <span class="tag cyan">Quay Registry</span>
+        <span class="tag cyan">SonarQube</span>
+      </div>
+    </div>
+
+    <div class="skill-category reveal">
+      <div class="skill-cat-title"><span class="icon">◉</span>Observability</div>
+      <div class="tags">
+        <span class="tag">Prometheus</span>
+        <span class="tag">Grafana</span>
+        <span class="tag">ELK Stack</span>
+        <span class="tag">Elasticsearch</span>
+        <span class="tag">Logstash</span>
+        <span class="tag">Kibana</span>
+      </div>
+    </div>
+
+    <div class="skill-category reveal">
+      <div class="skill-cat-title"><span class="icon">🔒</span>Security &amp; Backup</div>
+      <div class="tags">
+        <span class="tag cyan">kube-bench</span>
+        <span class="tag cyan">NeuVector</span>
+        <span class="tag cyan">Velero</span>
+        <span class="tag cyan">CIS Benchmarking</span>
+        <span class="tag cyan">RBAC</span>
+      </div>
+    </div>
+
+    <div class="skill-category reveal">
+      <div class="skill-cat-title"><span class="icon">&lt;/&gt;</span>Languages &amp; Scripting</div>
+      <div class="tags">
+        <span class="tag">Python</span>
+        <span class="tag">Bash / Shell</span>
+        <span class="tag">Ansible</span>
+        <span class="tag">JavaScript</span>
+        <span class="tag">Java</span>
+        <span class="tag">PostgreSQL</span>
+      </div>
+    </div>
+
+    <div class="skill-category reveal">
+      <div class="skill-cat-title"><span class="icon">⬡</span>Messaging &amp; Infra</div>
+      <div class="tags">
+        <span class="tag cyan">Kafka</span>
+        <span class="tag cyan">EMQX</span>
+        <span class="tag cyan">Linux / Unix</span>
+        <span class="tag cyan">Nginx Ingress</span>
+        <span class="tag cyan">HPA</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <p class="section-label reveal">03 · Experience</p>
+  <h2 class="section-title reveal">Career Timeline</h2>
+
+  <div class="timeline">
+
+    <div class="job">
+      <div class="job-header">
+        <div class="job-title">DevOps Engineer</div>
+        <div class="job-company">ESDS Software Solution Ltd.</div>
+        <div class="job-date">April 2025 – Present</div>
+      </div>
+      <ul class="job-points">
+        <li>Designed end-to-end CI/CD pipelines using Jenkins, GitHub, and GitLab with automated build, quality checks, containerization &amp; deployment.</li>
+        <li>Implemented GitOps-based deployments using ArgoCD and Helm for Kubernetes and OpenShift environments.</li>
+        <li>Automated cluster provisioning workflows using Terraform, Bash, Python &amp; Ansible — reducing manual effort significantly.</li>
+        <li>Built centralized logging, monitoring &amp; alerting with ELK, Prometheus, and Grafana across multi-tenant client spaces.</li>
+        <li>Improved security posture by integrating SonarQube, Velero, and kube-bench across delivery pipelines.</li>
+      </ul>
+      <div class="job-tools">
+        <span class="tag">Jenkins</span><span class="tag">ArgoCD</span><span class="tag">OpenShift</span><span class="tag">Helm</span><span class="tag">Terraform</span><span class="tag">ELK</span><span class="tag">Prometheus</span>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-header">
+        <div class="job-title">DevOps &amp; Kubernetes Administrator</div>
+        <div class="job-company">Jio Platforms Ltd.</div>
+        <div class="job-date">Oct 2023 – April 2025</div>
+      </div>
+      <ul class="job-points">
+        <li>Deployed custom automation scripts across 1000+ Kubernetes clusters, reducing manual effort and improving incident response by 50%.</li>
+        <li>Led Kubernetes cluster upgrades to v1.29.1 and container runtime migrations (Docker → CRI-O / containerd), boosting security by 25% and performance by 15%.</li>
+        <li>Resolved complex cluster issues: nodes in NotReady state, pod scheduling failures, cert renewals, RBAC configuration, DNS &amp; ingress misconfigurations.</li>
+        <li>Orchestrated CIS benchmark PoC, tested NeuVector &amp; kube-bench, automated remediation via Ansible — cutting manual security interventions by 90%.</li>
+      </ul>
+      <div class="job-tools">
+        <span class="tag cyan">Kubernetes v1.29</span><span class="tag cyan">CRI-O</span><span class="tag cyan">NeuVector</span><span class="tag cyan">Ansible</span><span class="tag cyan">kube-bench</span><span class="tag cyan">CloudXP</span>
+      </div>
+    </div>
+
+    <div class="job">
+      <div class="job-header">
+        <div class="job-title">Front-End Developer</div>
+        <div class="job-company">Blue Planet Solutions, India</div>
+        <div class="job-date">Feb 2022 – May 2023</div>
+      </div>
+      <ul class="job-points">
+        <li>Reduced page load time by 30% through image compression, code minification &amp; lazy loading.</li>
+        <li>Redesigned checkout flow, driving a 15% boost in conversion rates through improved UX.</li>
+        <li>Deployed containerized applications on Azure Kubernetes Service (AKS).</li>
+      </ul>
+      <div class="job-tools">
+        <span class="tag">React.js</span><span class="tag">AKS</span><span class="tag">Docker</span><span class="tag">CSS Optimization</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label reveal">04 · Projects</p>
+  <h2 class="section-title reveal">Featured Work</h2>
+
+  <div class="section-controls reveal" id="project-controls">
+    <button class="chip-btn active" data-project-filter="all">All</button>
+    <button class="chip-btn" data-project-filter="frontend">Frontend</button>
+    <button class="chip-btn" data-project-filter="kubernetes">Kubernetes</button>
+    <button class="chip-btn" data-project-filter="automation">Automation</button>
+    <button class="chip-btn" data-project-filter="security">Security</button>
+  </div>
+
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <div class="project-num">Project 01</div>
+      <div class="project-title">FilmPire</div>
+      <p class="project-desc">A full-featured movie discovery application enabling users to explore thousands of films by genre, rating, and category — powered by The Movie DB API and an AI voice assistant.</p>
+      <div class="project-results">
+        <strong>Key Achievement</strong>
+        Fully containerized &amp; deployed on Kubernetes with multi-environment Ingress routing and horizontal auto-scaling.
+      </div>
+      <div class="tags" style="margin-top:0.8rem;">
+        <span class="tag">React.js</span>
+        <span class="tag">Node.js</span>
+        <span class="tag">Kubernetes</span>
+        <span class="tag">Docker</span>
+        <span class="tag">Alan AI</span>
+        <span class="tag">TMDB API</span>
+        <span class="tag">K8s Ingress</span>
+      </div>
+      <div class="project-links">
+        <a href="https://github.com" class="proj-link">⌥ GitHub</a>
+        <a href="#" class="proj-link">↗ Live Demo</a>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">Project 02</div>
+      <div class="project-title">Multi-Cluster Automation Framework</div>
+      <p class="project-desc">Designed and deployed automated alert generation scripts across 1000+ Kubernetes clusters at Jio Platforms, dramatically reducing manual monitoring overhead.</p>
+      <div class="project-results">
+        <strong>Impact</strong>
+        50% improvement in incident response time · Eliminated manual alert triage across a fleet of 1000+ clusters.
+      </div>
+      <div class="tags" style="margin-top:0.8rem;">
+        <span class="tag cyan">Python</span>
+        <span class="tag cyan">Bash</span>
+        <span class="tag cyan">Kubernetes API</span>
+        <span class="tag cyan">Prometheus</span>
+        <span class="tag cyan">Grafana</span>
+        <span class="tag cyan">Ansible</span>
+      </div>
+    </div>
+
+    <div class="project-card">
+      <div class="project-num">Project 03</div>
+      <div class="project-title">CIS Benchmark Automation</div>
+      <p class="project-desc">Proof-of-concept for automated CIS security benchmarking across Kubernetes clusters. Evaluated NeuVector and kube-bench tools, then built full auto-remediation pipelines.</p>
+      <div class="project-results">
+        <strong>Impact</strong>
+        90% reduction in manual security interventions · Fully automated remediation via Ansible jobs.
+      </div>
+      <div class="tags" style="margin-top:0.8rem;">
+        <span class="tag">kube-bench</span>
+        <span class="tag">NeuVector</span>
+        <span class="tag">Ansible</span>
+        <span class="tag">Kubernetes</span>
+        <span class="tag">Bash</span>
+        <span class="tag">CIS Controls</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- PLAYGROUND -->
+<section id="playground">
+  <p class="section-label reveal">05 · Play</p>
+  <h2 class="section-title reveal">Interactive DevOps Playground</h2>
+
+  <div class="play-grid reveal">
+    <div class="play-card">
+      <div class="play-header">
+        <div>
+          <div class="play-title">Live terminal simulator</div>
+          <span class="status-pill" id="terminal-state">Ready</span>
+        </div>
+        <button class="icon-btn" id="clear-terminal" aria-label="Clear terminal">⌫</button>
+      </div>
+
+      <div class="play-body">
+        <div class="play-output" id="play-output" aria-live="polite"></div>
+
+        <form class="terminal-form" id="command-form">
+          <span class="prompt">$</span>
+          <input id="command-input" type="text" autocomplete="off" placeholder="Try: help, status, deploy, scale 5, incident, rollback, logs" />
+          <button class="terminal-send" type="submit">Run</button>
+        </form>
+
+        <div class="command-palette">
+          <button class="mini-cmd" data-command="help">help</button>
+          <button class="mini-cmd" data-command="status">status</button>
+          <button class="mini-cmd" data-command="deploy">deploy</button>
+          <button class="mini-cmd" data-command="scale 5">scale 5</button>
+          <button class="mini-cmd" data-command="incident">incident</button>
+          <button class="mini-cmd" data-command="rollback">rollback</button>
+          <button class="mini-cmd" data-command="contact">contact</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="play-card cluster-board">
+      <div class="play-header">
+        <div>
+          <div class="play-title">Cluster visualizer</div>
+          <span class="status-pill" id="cluster-state">Healthy</span>
+        </div>
+      </div>
+
+      <div class="play-body cluster-board">
+        <div class="cluster-metrics">
+          <div class="metric">
+            <strong id="metric-pods">3</strong>
+            <span>Pods</span>
+          </div>
+          <div class="metric">
+            <strong id="metric-nodes">3</strong>
+            <span>Nodes</span>
+          </div>
+          <div class="metric">
+            <strong id="metric-health">99%</strong>
+            <span>Health</span>
+          </div>
+        </div>
+
+        <div class="cluster-map" id="cluster-map"></div>
+
+        <div class="play-actions">
+          <button class="play-btn" data-command="deploy">
+            <strong>Deploy app</strong>
+            <span>Creates a rolling update</span>
+          </button>
+          <button class="play-btn" data-command="scale 5">
+            <strong>Scale pods</strong>
+            <span>Increases replicas to 5</span>
+          </button>
+          <button class="play-btn" data-command="incident">
+            <strong>Simulate incident</strong>
+            <span>Marks one pod unhealthy</span>
+          </button>
+          <button class="play-btn" data-command="rollback">
+            <strong>Rollback</strong>
+            <span>Restores last healthy state</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label reveal">06 · Contact</p>
+  <h2 class="section-title reveal">Let's Connect</h2>
+
+  <div class="contact-grid reveal">
+    <div class="contact-info">
+      <p>Open to DevOps, SRE, and Platform Engineering roles. Whether you have a project in mind or just want to talk cloud-native — my inbox is always open.</p>
+
+      <div class="social-links">
+        <a href="mailto:nirajpaln7@gmail.com" class="social-link">
+          <span>✉</span>
+          <span>nirajpaln7@gmail.com</span>
+          <span class="s-label">email</span>
+        </a>
+        <a href="https://www.linkedin.com/in/nirajpal01" class="social-link" target="_blank">
+          <span>in</span>
+          <span>linkedin.com/in/nirajpal</span>
+          <span class="s-label">LinkedIn</span>
+        </a>
+        <a href="https://github.com/nirajj-pal/" class="social-link" target="_blank">
+          <span>⌥</span>
+          <span>github.com/nirajpal</span>
+          <span class="s-label">GitHub</span>
+        </a>
+        <a href="https://leetcode.com/u/niraj-pal/" class="social-link" target="_blank">
+          <span>◈</span>
+          <span>LeetCode — 400+ problems</span>
+          <span class="s-label">LeetCode</span>
+        </a>
+      </div>
+
+      <button class="btn-outline" id="copy-email" type="button" style="display:inline-block;margin-top:1.2rem;">Copy Email</button>
+    </div>
+
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Name</label>
+          <input type="text" placeholder="Your name" />
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="your@email.com" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text" placeholder="What's this about?" />
+      </div>
+      <div class="form-group">
+        <label>Message</label>
+        <textarea rows="5" placeholder="Tell me about the opportunity..."></textarea>
+      </div>
+      <button type="submit" class="submit-btn" id="send-btn">Send Message →</button>
+    </form>
+  </div>
+</section>
+
+
+<div class="modal-backdrop" id="project-modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-head">
+      <div>
+        <p class="section-label" style="margin-bottom:0.35rem;">Project details</p>
+        <h3 id="modal-title"></h3>
+      </div>
+      <button class="modal-close" id="modal-close" aria-label="Close project details">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+  </div>
+</div>
+
+<button class="icon-btn back-top" id="back-top" aria-label="Back to top">↑</button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<footer>
+  <p>Designed &amp; built by <span>Niraj Pal</span> · Thane, Maharashtra, India · 2026</p>
+</footer>
+
+<script>
+  // Typing animation
+  const lines = [
+    'terraform apply --auto-approve',
+    'helm upgrade --install app ./charts/app',
+    'argocd app sync production',
+    'kubectl rollout status deployment/api'
+  ];
+  let lineIdx = 0, charIdx = 0, deleting = false;
+  const el = document.getElementById('typing-text');
+
+  function type() {
+    const current = lines[lineIdx];
+    if (!deleting) {
+      el.textContent = current.slice(0, ++charIdx);
+      if (charIdx === current.length) {
+        deleting = true;
+        setTimeout(type, 1800);
+        return;
+      }
+    } else {
+      el.textContent = current.slice(0, --charIdx);
+      if (charIdx === 0) {
+        deleting = false;
+        lineIdx = (lineIdx + 1) % lines.length;
+      }
+    }
+    setTimeout(type, deleting ? 40 : 80);
+  }
+  setTimeout(type, 1600);
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal, .job, .project-card');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(item => observer.observe(item));
+
+  const $ = (selector, scope = document) => scope.querySelector(selector);
+  const $$ = (selector, scope = document) => Array.from(scope.querySelectorAll(selector));
+
+  // Toast
+  const toast = $('#toast');
+  let toastTimer;
+  function showToast(message) {
+    toast.textContent = message;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+
+  // Scroll progress and back-to-top
+  const progress = $('#scroll-progress');
+  const backTop = $('#back-top');
+  function updateProgress() {
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = scrollable > 0 ? (window.scrollY / scrollable) * 100 : 0;
+    progress.style.width = pct + '%';
+    backTop.classList.toggle('visible', window.scrollY > 600);
+  }
+  window.addEventListener('scroll', updateProgress);
+  updateProgress();
+
+  backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+  // Mobile nav
+  const menuToggle = $('#menu-toggle');
+  const navLinks = $('#nav-links');
+  menuToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    menuToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    menuToggle.textContent = open ? '×' : '☰';
+  });
+  $$('#nav-links a').forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.textContent = '☰';
+    });
+  });
+
+  // Theme toggle
+  const themeToggle = $('#theme-toggle');
+  const savedTheme = localStorage.getItem('np-theme');
+  if (savedTheme) {
+    document.body.dataset.theme = savedTheme;
+    themeToggle.textContent = savedTheme === 'light' ? '☀' : '☾';
+  }
+  themeToggle.addEventListener('click', () => {
+    const next = document.body.dataset.theme === 'light' ? 'dark' : 'light';
+    document.body.dataset.theme = next;
+    localStorage.setItem('np-theme', next);
+    themeToggle.textContent = next === 'light' ? '☀' : '☾';
+    showToast(`${next === 'light' ? 'Light' : 'Dark'} mode enabled`);
+  });
+
+  // Animated stats
+  const stats = $$('.stat-card .num');
+  const statObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting || entry.target.dataset.counted) return;
+      entry.target.dataset.counted = 'true';
+      const raw = entry.target.textContent.trim();
+      const match = raw.match(/\d+/);
+      if (!match) return;
+      const target = Number(match[0]);
+      const suffix = raw.replace(String(target), '');
+      let current = 0;
+      const steps = 36;
+      const increment = Math.max(1, Math.ceil(target / steps));
+      const tick = () => {
+        current = Math.min(target, current + increment);
+        entry.target.textContent = current + suffix;
+        if (current < target) requestAnimationFrame(tick);
+      };
+      tick();
+    });
+  }, { threshold: 0.6 });
+  stats.forEach(stat => statObserver.observe(stat));
+
+  // Skills search/filter
+  const skillCards = $$('.skill-category');
+  const skillSearch = $('#skill-search');
+  let activeSkillFilter = 'all';
+
+  function skillText(card) {
+    return card.textContent.toLowerCase();
+  }
+
+  function applySkillFilter() {
+    const search = skillSearch.value.trim().toLowerCase();
+    skillCards.forEach(card => {
+      const text = skillText(card);
+      const matchesSearch = !search || text.includes(search);
+      const matchesFilter =
+        activeSkillFilter === 'all' ||
+        (activeSkillFilter === 'cloud' && /kubernetes|openshift|aks|aws|terraform|helm/.test(text)) ||
+        (activeSkillFilter === 'gitops' && /jenkins|gitops|argocd|github|gitlab|docker|registry|sonarqube/.test(text)) ||
+        (activeSkillFilter === 'observability' && /prometheus|grafana|elk|elasticsearch|logstash|kibana/.test(text)) ||
+        (activeSkillFilter === 'security' && /security|backup|rbac|neuvector|kube-bench|cis|velero/.test(text));
+      card.classList.toggle('is-hidden', !(matchesSearch && matchesFilter));
+    });
+  }
+
+  $$('#skill-controls .chip-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('#skill-controls .chip-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeSkillFilter = btn.dataset.skillFilter;
+      applySkillFilter();
+    });
+  });
+  skillSearch.addEventListener('input', applySkillFilter);
+
+  // Project filters and modal
+  const projectCards = $$('.project-card');
+  let activeProjectFilter = 'all';
+
+  function projectMatches(card, filter) {
+    const text = card.textContent.toLowerCase();
+    if (filter === 'all') return true;
+    if (filter === 'frontend') return /react|node|tmdb|alan|frontend/.test(text);
+    if (filter === 'kubernetes') return /kubernetes|k8s|cluster|ingress/.test(text);
+    if (filter === 'automation') return /automation|python|bash|ansible|prometheus|grafana/.test(text);
+    if (filter === 'security') return /cis|security|kube-bench|neuvector/.test(text);
+    return true;
+  }
+
+  function applyProjectFilter() {
+    projectCards.forEach(card => card.classList.toggle('is-hidden', !projectMatches(card, activeProjectFilter)));
+  }
+
+  $$('#project-controls .chip-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $$('#project-controls .chip-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeProjectFilter = btn.dataset.projectFilter;
+      applyProjectFilter();
+    });
+  });
+
+  const modal = $('#project-modal');
+  const modalTitle = $('#modal-title');
+  const modalBody = $('#modal-body');
+  const modalClose = $('#modal-close');
+
+  const extraDetails = {
+    'FilmPire': 'Interactive resume viewers can understand both the frontend and DevOps story here: movie discovery UX, API integration, containerization, Kubernetes ingress routing, and horizontal scaling.',
+    'Multi-Cluster Automation Framework': 'This is the strongest infrastructure story on the page. It highlights fleet-scale Kubernetes automation, repeatable scripts, alert workflows, and the measurable reduction in incident response time.',
+    'CIS Benchmark Automation': 'This project shows security thinking: benchmark checks, tool evaluation, automated remediation, and operational impact through Ansible jobs.'
+  };
+
+  function openProject(card) {
+    const title = $('.project-title', card).textContent.trim();
+    const desc = $('.project-desc', card).textContent.trim();
+    const result = $('.project-results', card)?.textContent.trim() || '';
+    const tags = $$('.tag', card).map(tag => `<span class="tag">${tag.textContent}</span>`).join('');
+    modalTitle.textContent = title;
+    modalBody.innerHTML = `
+      <p>${desc}</p>
+      <p style="margin-top:0.9rem;">${extraDetails[title] || 'This project demonstrates practical delivery, automation, and measurable engineering impact.'}</p>
+      ${result ? `<div class="project-results" style="margin-top:1rem;">${result}</div>` : ''}
+      <div class="tags" style="margin-top:1rem;">${tags}</div>
+    `;
+    modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProject() {
+    modal.hidden = true;
+    document.body.style.overflow = '';
+  }
+
+  projectCards.forEach(card => {
+    card.tabIndex = 0;
+    const action = document.createElement('div');
+    action.className = 'project-actions';
+    action.innerHTML = '<button class="details-btn" type="button">Explore details</button><span style="font-size:0.68rem;color:var(--dim);">Click card</span>';
+    card.appendChild(action);
+
+    card.addEventListener('click', event => {
+      if (event.target.closest('a')) return;
+      openProject(card);
+    });
+    card.addEventListener('keydown', event => {
+      if (event.key === 'Enter') openProject(card);
+    });
+  });
+
+  modalClose.addEventListener('click', closeProject);
+  modal.addEventListener('click', event => {
+    if (event.target === modal) closeProject();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !modal.hidden) closeProject();
+  });
+
+  // DevOps playground
+  const playOutput = $('#play-output');
+  const commandForm = $('#command-form');
+  const commandInput = $('#command-input');
+  const terminalState = $('#terminal-state');
+  const clusterState = $('#cluster-state');
+  const clusterMap = $('#cluster-map');
+  const metricPods = $('#metric-pods');
+  const metricNodes = $('#metric-nodes');
+  const metricHealth = $('#metric-health');
+
+  let cluster = {
+    pods: 3,
+    nodes: 3,
+    health: 99,
+    unhealthy: false,
+    deployment: 'api:v1.8.3'
+  };
+
+  function addLine(text, type = '') {
+    const p = document.createElement('p');
+    p.className = type;
+    p.innerHTML = text;
+    playOutput.appendChild(p);
+    playOutput.scrollTop = playOutput.scrollHeight;
+  }
+
+  function setState(label, health, unhealthy = false) {
+    cluster.health = health;
+    cluster.unhealthy = unhealthy;
+    terminalState.textContent = label;
+    clusterState.textContent = unhealthy ? 'Degraded' : label;
+    clusterState.style.color = unhealthy ? '#ffbd2e' : 'var(--green)';
+    renderCluster();
+  }
+
+  function renderCluster() {
+    metricPods.textContent = cluster.pods;
+    metricNodes.textContent = cluster.nodes;
+    metricHealth.textContent = `${cluster.health}%`;
+
+    clusterMap.innerHTML = '';
+    for (let nodeIndex = 1; nodeIndex <= cluster.nodes; nodeIndex++) {
+      const node = document.createElement('div');
+      node.className = 'node';
+      const podsOnNode = Math.max(1, Math.ceil(cluster.pods / cluster.nodes));
+      const podHtml = Array.from({ length: podsOnNode }, (_, podIndex) => {
+        const globalPodIndex = (nodeIndex - 1) * podsOnNode + podIndex + 1;
+        if (globalPodIndex > cluster.pods) return '';
+        const cls = cluster.unhealthy && globalPodIndex === 1 ? 'pod fail' : 'pod';
+        return `<span class="${cls}" title="pod-${globalPodIndex}"></span>`;
+      }).join('');
+
+      node.innerHTML = `
+        <div class="node-head">
+          <span>worker-${nodeIndex}</span>
+          <span>${cluster.unhealthy && nodeIndex === 1 ? 'needs attention' : 'ready'}</span>
+        </div>
+        <div class="pods">${podHtml}</div>
+      `;
+      clusterMap.appendChild(node);
+    }
+  }
+
+  function runCommand(input) {
+    const raw = input.trim();
+    if (!raw) return;
+    const cmd = raw.toLowerCase();
+
+    addLine(`<span class="ok">$</span> ${raw}`);
+
+    if (cmd === 'help') {
+      addLine('Available commands: <span class="info">status</span>, <span class="info">deploy</span>, <span class="info">scale 5</span>, <span class="info">incident</span>, <span class="info">rollback</span>, <span class="info">logs</span>, <span class="info">contact</span>, <span class="info">clear</span>.', 'info');
+    } else if (cmd === 'status') {
+      addLine(`deployment/${cluster.deployment} · replicas=${cluster.pods} · nodes=${cluster.nodes} · health=${cluster.health}%`, cluster.unhealthy ? 'warn' : 'ok');
+    } else if (cmd === 'deploy') {
+      cluster.deployment = 'api:v1.8.4';
+      setState('Rolling', 96, false);
+      addLine('Starting rolling update for deployment/api...', 'info');
+      setTimeout(() => {
+        setState('Healthy', 99, false);
+        addLine('deployment/api successfully rolled out. New version: api:v1.8.4', 'ok');
+      }, 900);
+    } else if (cmd.startsWith('scale')) {
+      const desired = Number(cmd.split(/\s+/)[1]) || 5;
+      cluster.pods = Math.min(Math.max(desired, 1), 9);
+      setState('Scaled', 98, false);
+      addLine(`Scaled deployment/api to ${cluster.pods} replicas.`, 'ok');
+    } else if (cmd === 'incident') {
+      setState('Investigating', 74, true);
+      addLine('Alert fired: pod/api-1 is failing readiness checks. Suggested action: rollback or inspect logs.', 'warn');
+    } else if (cmd === 'rollback') {
+      cluster.deployment = 'api:v1.8.3';
+      setState('Healthy', 99, false);
+      addLine('Rollback complete. deployment/api restored to api:v1.8.3.', 'ok');
+    } else if (cmd === 'logs') {
+      addLine('[api-1] GET /healthz 200 · latency=42ms', 'info');
+      addLine('[api-2] sync complete · cache warm', 'info');
+      addLine(cluster.unhealthy ? '[api-1] readiness probe failed · retrying' : '[api-3] autoscaler stable · no action needed', cluster.unhealthy ? 'warn' : 'ok');
+    } else if (cmd === 'contact') {
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+      addLine('Opening contact section...', 'ok');
+    } else if (cmd === 'clear') {
+      playOutput.innerHTML = '';
+      return;
+    } else {
+      addLine(`Command not found: ${raw}. Try "help".`, 'warn');
+    }
+  }
+
+  commandForm.addEventListener('submit', event => {
+    event.preventDefault();
+    runCommand(commandInput.value);
+    commandInput.value = '';
+  });
+
+  document.addEventListener('click', event => {
+    const button = event.target.closest('[data-command]');
+    if (!button) return;
+    const command = button.dataset.command;
+    if (button.classList.contains('mini-cmd') || button.classList.contains('play-btn')) {
+      document.getElementById('playground')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => runCommand(command), 250);
+    }
+  });
+
+  $('#clear-terminal').addEventListener('click', () => {
+    playOutput.innerHTML = '';
+    addLine('Terminal cleared. Type <span class="info">help</span> to start.', 'info');
+  });
+
+  renderCluster();
+  addLine('Welcome to the DevOps playground. Type <span class="info">help</span> or click an action to interact.', 'info');
+
+  // Copy email
+  $('#copy-email').addEventListener('click', async () => {
+    const email = 'nirajpaln7@gmail.com';
+    try {
+      await navigator.clipboard.writeText(email);
+      showToast('Email copied to clipboard');
+    } catch (err) {
+      showToast(email);
+    }
+  });
+
+  // Form handler
+  function handleSubmit(e) {
+    e.preventDefault();
+    const form = e.target;
+    const [nameInput, emailInput, subjectInput] = form.querySelectorAll('input');
+    const messageInput = form.querySelector('textarea');
+    const btn = document.getElementById('send-btn');
+
+    const name = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const subject = subjectInput.value.trim();
+    const message = messageInput.value.trim();
+
+    if (!name || !email || !subject || !message) {
+      showToast('Please fill in all fields before sending.');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      showToast('Please enter a valid email address.');
+      return;
+    }
+
+    btn.textContent = 'Opening email client...';
+    btn.style.background = '#00d4ff';
+
+    const mailto = `mailto:nirajpaln7@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`Hi Niraj,\n\n${message}\n\nFrom: ${name}\nEmail: ${email}`)}`;
+    window.location.href = mailto;
+
+    setTimeout(() => {
+      btn.textContent = 'Send Message →';
+      btn.style.background = 'var(--green)';
+      form.reset();
+      showToast('Your email draft is ready in your mail app.');
+    }, 1200);
+  }
+
+  window.handleSubmit = handleSubmit;
+</script>
+</body>
+</html>
